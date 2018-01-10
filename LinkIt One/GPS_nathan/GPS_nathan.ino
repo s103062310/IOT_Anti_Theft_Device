@@ -4,11 +4,13 @@ gpsSentenceInfoStruct info;
 char buff[256];
 typedef struct gps_info{
   int hour, minute, second;
-  float latitude_value;
+  double latitude_value;
   char latitude;
-  float longtitude_value;
+  double latitude_output;
+  double longtitude_value;
   char longtitude;
-  float altitude_value;
+  double longtitude_output;
+  double altitude_value;
   int fix_quality;
   int satellites;
 };
@@ -41,13 +43,31 @@ void parseGPGGA(const char* GPGGAstr)
    *  (empty field) DGPS station ID number
    *  *47          the checksum data, always begins with *
    */
-  sscanf(GPGGAstr,"$GPGGA,%2d%2d%2d%*4s,%f,%c,%f,%c,%d,%d,,%f,%*s",&GPS_INFO.hour,&GPS_INFO.minute,&GPS_INFO.second,&GPS_INFO.latitude_value,&GPS_INFO.latitude,&GPS_INFO.longtitude_value,&GPS_INFO.longtitude,&GPS_INFO.fix_quality,&GPS_INFO.satellites,&GPS_INFO.altitude_value);
+  sscanf(GPGGAstr,"$GPGGA,%2d%2d%2d%*4s,%10lf,%c,%10lf,%c,%d,%d,,%lf,%*s",&GPS_INFO.hour,&GPS_INFO.minute,&GPS_INFO.second,&GPS_INFO.latitude_value,&GPS_INFO.latitude,&GPS_INFO.longtitude_value,&GPS_INFO.longtitude,&GPS_INFO.fix_quality,&GPS_INFO.satellites,&GPS_INFO.altitude_value);
   sprintf(buff, "UTC time    : %02d:%02d:%02d", GPS_INFO.hour, GPS_INFO.minute, GPS_INFO.second);
   Serial.println(buff);
   sprintf(buff, "Latitude    : %3dd %2d' %2d\" %c", (int)GPS_INFO.latitude_value/100, (int)GPS_INFO.latitude_value%100, (int)((GPS_INFO.latitude_value-(int)GPS_INFO.latitude_value)*60.0), GPS_INFO.latitude);
   Serial.println(buff);
+  
+  GPS_INFO.latitude_output = (int)GPS_INFO.latitude_value/100;
+  //Serial.print(GPS_INFO.latitude_value); Serial.println((int)GPS_INFO.latitude_value/100*100);
+  double temp = GPS_INFO.latitude_value - (int)GPS_INFO.latitude_value/100*100;
+  //Serial.print("temp="); Serial.println(temp);
+  temp = temp/60.0;
+ // Serial.print("temp="); Serial.println(temp);
+  GPS_INFO.latitude_output+=temp;
+  //Serial.print("latitude_output=");Serial.println(GPS_INFO.latitude_output);
   sprintf(buff, "Longitude   : %3dd %2d' %2d\" %c", (int)GPS_INFO.longtitude_value/100, (int)GPS_INFO.longtitude_value%100, (int)((GPS_INFO.longtitude_value-(int)GPS_INFO.longtitude_value)*60.0), GPS_INFO.longtitude);
   Serial.println(buff);
+
+  GPS_INFO.longtitude_output = (int)GPS_INFO.longtitude_value/100;
+  temp = GPS_INFO.longtitude_value - (int)GPS_INFO.longtitude_value/100*100;
+  //Serial.print("temp="); Serial.println(temp);
+  temp = temp/60.0;
+  //Serial.print("temp="); Serial.println(temp);
+  GPS_INFO.longtitude_output+=temp;
+ // Serial.print("longtitude_output=");Serial.println(GPS_INFO.longtitude_output);
+  
   Serial.print("Altitude    : ");
   Serial.println(GPS_INFO.altitude_value);
   if(GPS_INFO.fix_quality==0)Serial.println("Fix quality : GPS Invalid");//未定位
@@ -71,6 +91,8 @@ void loop() {
   LGPS.getData(&info);
   //Serial.println((char*)info.GPGGA); 
   parseGPGGA((const char*)info.GPGGA);
+  //TODO:upload GPS_INFO.latitude_output and GPS_INFO.longtitude_output to MCS
+  
   delay(2000);
 }
 
