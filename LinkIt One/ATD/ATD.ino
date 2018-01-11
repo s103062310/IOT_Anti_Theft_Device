@@ -101,7 +101,7 @@ void loop()
     LGPS.getData(&info);
     parseGPGGA((const char*)info.GPGGA);
 
-    //TODO:upload latitude_output and longtitude_output to MCS
+    //TODO:upload GPS_INFO.latitude_output and GPS_INFO.longtitude_output to MCS
     
   }else{
     digitalWrite(13, LOW);
