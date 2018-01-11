@@ -1,6 +1,12 @@
 # IOT_Anti_Theft_Device
 
 
+## Hardware
+
+
+## Network
+
+
 ## Phone APP
 
 ### Function Description
@@ -8,7 +14,7 @@
 + call police: when confirm the message that the target was stolen, pop out the choice box to choose whether sending message to police or not.
 + view statistical data website: be able to view all stolen record and other statistical data from official website.
 
-### prototype
+### Prototype
 -----------------------------
 > log in page
 >> main meun
@@ -26,8 +32,8 @@
 	>+ Need account box and password box.  
 	>+ Need create button.  
 	>+ Pop out dialog to show create result.  
-	>>++ If sucess, confirm and go back to log in page.   
-	>>++ If fail, confirm and stay at create page.  
+	>>+ If sucess, confirm and go back to log in page.   
+	>>+ If fail, confirm and stay at create page.  
 
 #### start monitor
 + First, pop out function confirm box, push **"yes"** to enter the page.
@@ -58,8 +64,8 @@
 	>+ Need original password box and new password box.   
 	>+ Need modify button.   
 	>+ Pop out dialog to show result.    
-	>>++ If sucess, back to setting screen.    
-	>>++ If fail, stay at modify password screen.   
+	>>+ If sucess, back to setting screen.    
+	>>+ If fail, stay at modify password screen.   
 + Alarm Sound: toggle button
 	>+ Need to connect to MySQL database.    
 	>+ Need to notify sensor to turn off sound through server.   
@@ -67,4 +73,25 @@
 	>+ Need target name box and target ID box.   
 	>+ Need add button.   
 	>+ Need connect to MySQL database.   
-	>+ Need to notify server to establish connection with sensor.   
+	>+ Need to notify server to establish connection with sensor.
+
+	
+## Database
+
+Use MySQL establish database.
+
+### Account Table
+|User Name|Password|Alarm Sound|
+|:--------|:-------|:----------|
+|Cindy    |062310  |On         |
+
+### Target List Table
+|Target MAC|User |
+|:---------|:----|
+|dli5s6    |Cindy|
+
+
+## Server
+
+
+## Website
