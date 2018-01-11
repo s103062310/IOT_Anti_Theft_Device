@@ -49,6 +49,10 @@ typedef struct gps_info{
 };
 gps_info GPS_INFO;
 
+#include "LDHT.h"
+char readcharbuffer[20];
+int readbuffersize;
+char temp_input;  
 
 void setup() {
   // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -57,7 +61,8 @@ void setup() {
   // initialize serial communication
   // (38400 chosen because it works as well at 8MHz as it does at 16MHz, but
   // it's really up to you depending on your project)
-  Serial.begin(38400);
+  Serial.begin(9600);
+  Serial1.begin(9600);
 
   // initialize device
   Serial.println("Initializing I2C devices...");
@@ -75,6 +80,7 @@ void setup() {
   LGPS.powerOn();
   Serial.println("LGPS Power on, and waiting ..."); 
   delay(3000);
+  
   
 }
 
@@ -102,7 +108,29 @@ void loop()
     parseGPGGA((const char*)info.GPGGA);
 
     //TODO:upload GPS_INFO.latitude_output and GPS_INFO.longtitude_output to MCS
-    
+    sprintf(buff, "%lf,%lf", GPS_INFO.latitude_output, GPS_INFO.longtitude_output);
+    Serial1.print("AT+DTX=11,\"L");
+    //Serial1.print(buff);
+    Serial1.print(GPS_INFO.latitude_output);
+    Serial1.print(",");
+    Serial1.print(GPS_INFO.longtitude_output);
+    Serial1.println("\"");
+    delay(1000);
+    readbuffersize = Serial1.available();
+    while(readbuffersize){
+      temp_input = Serial1.read();
+      Serial.print(temp_input);
+      readbuffersize--;
+   }
+   delay(9000);
+     readbuffersize = Serial1.available();
+    while(readbuffersize){
+      temp_input = Serial1.read();
+      Serial.print(temp_input);
+      readbuffersize--;
+   }
+   Serial.println("things");
+   delay(2000);
   }else{
     digitalWrite(13, LOW);
   }
@@ -157,7 +185,7 @@ void parseGPGGA(const char* GPGGAstr)
    *                            5 = Float RTK
    *                            6 = estimated (dead reckoning) (2.3 feature)
    *                            7 = Manual input mode
-   *                            8 = Simulation mode
+   *                            8 = Simulation mode                                            
    *  08           Number of satellites being tracked
    *  0.9          Horizontal dilution of position
    *  545.4,M      Altitude, Meters, above mean sea level
