@@ -5,13 +5,13 @@ import urllib2
 mcs_data_format = {
    "datapoints":[
       {
-         "dataChnId":"degree",
+         "dataChnId":"latitude",
          "values":{
             "value":"00.00"
          }
       },
       {
-         "dataChnId":"final_humid",
+         "dataChnId":"longitude",
          "values":{
             "value":"00.00"
          }
@@ -38,10 +38,12 @@ def on_message(client, userdata, msg):
     if json_extractor[0]['macAddr'] == "0000000005010328":
 
         string_value = json_extractor[0]['data'].decode("hex")
-        # print(string_value[1:6])
-        # print(string_value[6:11])
-        mcs_data_format['datapoints'][0]['values']['value'] = string_value[1:6]
-        mcs_data_format['datapoints'][1]['values']['value'] = string_value[6:11]
+        print(string_value)
+        data_upload = string_value.split(',')
+        #print(string_value[1:6])
+        #print(string_value[6:11])
+        mcs_data_format['datapoints'][0]['values']['value'] = data_upload[0]
+        mcs_data_format['datapoints'][1]['values']['value'] = data_upload[1]
         # print(mcs_data_format)
         req = urllib2.Request('http://api.mediatek.com/mcs/v2/devices/DbcZjcVZ/datapoints')
         req.add_header('deviceKey', 'gc50RlzXrhxD4Lzu')
