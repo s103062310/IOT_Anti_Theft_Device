@@ -80,17 +80,25 @@ void setup() {
   LGPS.powerOn();
   Serial.println("LGPS Power on, and waiting ..."); 
   delay(3000);
+  
+  
 }
 
 void loop() 
-{
+{   
+  
   getAccel_Data();
   //getGyro_Data();
   //getCompassDate_calibrated(); // compass data has been calibrated here 
   getHeading();       //before we use this function we should run 'getCompassDate_calibrated()' frist, so that we can get calibrated data ,then we can get correct angle .          
   getTiltHeading();           
  
-  printAcceleration();
+  Serial.println("Acceleration(g) of X,Y,Z:");
+  Serial.print(Axyz[0]); 
+  Serial.print(",");
+  Serial.print(Axyz[1]); 
+  Serial.print(",");
+  Serial.println(Axyz[2]);
   char buff[256];
   sprintf(buff, "%f\n", abs(Axyz[0]-oldAxyz[0])+abs(Axyz[1]-oldAxyz[1])+abs(Axyz[2]-oldAxyz[2]));
   Serial.println(buff);
@@ -100,46 +108,14 @@ void loop()
     parseGPGGA((const char*)info.GPGGA);
 
     //TODO:upload GPS_INFO.latitude_output and GPS_INFO.longtitude_output to MCS
-    transmit(1, GPS_INFO.latitude_output);
-    check();
-    transmit(2, GPS_INFO.longtitude_output);
-    check();
-    transmit(3, GPS_INFO.altitude_value);
-    check();
-  }else{
-    digitalWrite(13, LOW);
-  }
-  for(int i=0; i<3; i++)oldAxyz[i]=Axyz[i];
-  delay(300);
-}
-
-void printAcceleration(){
-  Serial.println("Acceleration(g) of X,Y,Z:");
-  Serial.print(Axyz[0]); 
-  Serial.print(",");
-  Serial.print(Axyz[1]); 
-  Serial.print(",");
-  Serial.println(Axyz[2]);
-}
-
-void transmit(int index, double data){
-  //Serial1.print("AT+DTX=11,\"data\"");
-  char buff[256];
-  sprintf(buff, "%d,%.*lf", index, ((data>=100)?5:6) , data);
-  Serial1.print("AT+DTX=");
-  Serial1.print(strlen(buff));
-  Serial1.print(",\"");
-  Serial1.print(buff);
-  Serial1.println("\"");
-  Serial.print("AT+DTX=");
-  Serial.print(strlen(buff));
-  Serial.print(",\"");
-  Serial.print(buff);
-  Serial.println("\"");
-}
-
-void check(){
-  delay(1000);
+    sprintf(buff, "%lf,%lf", GPS_INFO.latitude_output, GPS_INFO.longtitude_output);
+    Serial1.print("AT+DTX=11,\"L");
+    //Serial1.print(buff);
+    Serial1.print(GPS_INFO.latitude_output);
+    Serial1.print(",");
+    Serial1.print(GPS_INFO.longtitude_output);
+    Serial1.println("\"");
+    delay(1000);
     readbuffersize = Serial1.available();
     while(readbuffersize){
       temp_input = Serial1.read();
@@ -153,7 +129,15 @@ void check(){
       Serial.print(temp_input);
       readbuffersize--;
    }
+   Serial.println("things");
    delay(2000);
+  }else{
+    digitalWrite(13, LOW);
+  }
+   for(int i=0; i<3; i++)oldAxyz[i]=Axyz[i];
+
+  delay(300);
+  
 }
 
 

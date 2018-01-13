@@ -25,10 +25,11 @@
 -----------------------------
 
 #### log in page
-+ Connect to PHP code and access MySQL database.
++ Connect to **Server**.
 + Need account box and password box.
 + Need log in button and create account button.
 + Create page: other screen
+	>+ Connect to **Server**.
 	>+ Need account box and password box.  
 	>+ Need create button.  
 	>+ Pop out dialog to show create result.  
@@ -47,7 +48,9 @@
 
 #### trace target
 + Choose one target to enter the page.
-+ Display radar map, user location, target location, distance.
++ Display timestamp, user location.
++ Display timestamp, target location.
++ Display radar map, distance.
 
 #### view website
 + Open the browser and go to the official website page.
@@ -56,39 +59,43 @@
 + Show information:
 	>+ User Name   
 	>+ Modify Password   
-	>+ Alarm Sound   
 	>+ Add Target   
+	>+ Remove Target   
+	>+ **Show ALL Target**   
+	>+ (Alarm Sound)   
 	>+ (other information)   
 + Modify Password: other screen
-	>+ Need to connect to MySQL database.     
+	>+ Need to connect to **Server**.     
 	>+ Need original password box and new password box.   
 	>+ Need modify button.   
 	>+ Pop out dialog to show result.    
 	>>+ If sucess, back to setting screen.    
 	>>+ If fail, stay at modify password screen.   
-+ Alarm Sound: toggle button
-	>+ Need to connect to MySQL database.    
-	>+ Need to notify sensor to turn off sound through server.   
-+ Add Target: other screen (?)
++ Add Target: other screen 
 	>+ Need target name box and target ID box.   
 	>+ Need add button.   
-	>+ Need connect to MySQL database.   
-	>+ Need to notify server to establish connection with sensor.
+	>+ Need connect to **Server** to establish connection with sensor.   
++ Add Target: pick list 
+	>+ Need a pick list to show all target.   
+	>+ After choosing, remove the target and notify **Server**.   
++ (Alarm Sound: toggle button)
+	>+ Need to connect to **Server**.    
+	>+ Need to notify sensor to turn off sound through server.   
 
-	
+
 ## Database
 
 Use MySQL establish database.
 
 ### Account Table
-|User Name|Password|Alarm Sound|
-|:--------|:-------|:----------|
-|Cindy    |062310  |On         |
+|User Name|Password|
+|:--------|:-------|
+|Cindy    |062310  |
 
 ### Target List Table
-|Target MAC|User |
-|:---------|:----|
-|dli5s6    |Cindy|
+|Target MAC|User |Time Stamp|
+|:---------|:----|:---------|
+|dli5s6    |Cindy|2018/01/13|
 
 
 ## Server
