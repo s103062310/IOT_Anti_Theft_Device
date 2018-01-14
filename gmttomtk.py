@@ -15,6 +15,12 @@ mcs_data_format = {
          "values":{
             "value":"00.00"
          }
+      },
+      {
+         "dataChnId":"attitude",
+         "values":{
+            "value":"00.00"
+         }
       }
    ]
 }
@@ -42,8 +48,9 @@ def on_message(client, userdata, msg):
         data_upload = string_value.split(',')
         #print(string_value[1:6])
         #print(string_value[6:11])
-        mcs_data_format['datapoints'][0]['values']['value'] = data_upload[0]
+        #mcs_data_format['datapoints'][0]['values']['value'] = data_upload[0]
         mcs_data_format['datapoints'][1]['values']['value'] = data_upload[1]
+        #mcs_data_format['datapoints'][2]['values']['value'] = data_upload[2]
         # print(mcs_data_format)
         req = urllib2.Request('http://api.mediatek.com/mcs/v2/devices/DbcZjcVZ/datapoints')
         req.add_header('deviceKey', 'gc50RlzXrhxD4Lzu')
