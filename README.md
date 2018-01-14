@@ -95,7 +95,8 @@ Use MySQL establish database.
 |...      |...     |
 
 ### Target List Table
-+ Except MAC and user, all initialize to 0.   
++ Except MAC and user, all initialize to 0.    
+
 |Target MAC|User |Time Stamp|Latitude|Longitude|
 |:---------|:----|:---------|:-------|:--------|
 |dli5s6    |Cindy|2018/01/13|24.5    |120.1    |
@@ -109,6 +110,7 @@ Use MySQL establish database.
 
 ### Place Table
 + All place initialize to 0.   
+
 |Region |Number of Events|
 |:------|:---------------|
 |Delta  |20              |
@@ -117,6 +119,7 @@ Use MySQL establish database.
 
 ### Time Table
 + Hour: 0~23   
+
 |Hour|Number of Events|
 |:---|:---------------|
 |0   |6               |
@@ -139,43 +142,43 @@ Use MySQL establish database.
 ### What APP Needs?
 + login page
 	>1.look up account   
-		'''
-		input: user name
-		output: No user **or** user password
-		'''
+		```   
+		input: user name   
+		output: No user **or** user password   
+		```   
 	>2.create new account: add new element to Account Table   
-		'''
-		input: user name **and** password
-		output: nothing
-		'''
+		```   
+		input: user name **and** password   
+		output: nothing   
+		```   
 + monitor/trace page
 	>1.trace target   
-		'''
-		input: target MAC
-		output: timestamp **and** GPS data(latitude&longitude)
-		(if not found MAC, return all zero)
-		'''
+		```   
+		input: target MAC   
+		output: timestamp **and** GPS data(latitude&longitude)   
+		(if not found MAC, return all zero)   
+		```   
 	>2.add event: add new element to Event Table   
-		'''
-		input: timestamp **and** GPS data(latitude&longitude)
-		output: nothing
-		'''
+		```   
+		input: timestamp **and** GPS data(latitude&longitude)   
+		output: nothing   
+		```   
 + setting page
 	>1.modify password: update Account Table   
-		'''
-		input: user name **and** new password
-		output: nothing
-		'''
+		```   
+		input: user name **and** new password   
+		output: nothing   
+		```   
 	>2.add target: add new element to Target List Table   
-		'''
-		input: user name **and** target MAC
-		output: nothing
-		'''
+		```   
+		input: user name **and** target MAC   
+		output: nothing   
+		```   
 	>3.remove target: delete element from Target List Table   
-		'''
-		input: target MAC
-		output: nothing
-		'''
+		```   
+		input: target MAC   
+		output: nothing   
+		```   
 
 
 ## Website
