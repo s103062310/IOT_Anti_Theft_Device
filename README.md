@@ -51,6 +51,7 @@
 + Display timestamp, user location.
 + Display timestamp, target location.
 + Display radar map, distance.
++ Connect to **Server**
 
 #### view website
 + Open the browser and go to the official website page.
@@ -91,14 +92,90 @@ Use MySQL establish database.
 |User Name|Password|
 |:--------|:-------|
 |Cindy    |062310  |
+|...      |...     |
 
 ### Target List Table
-|Target MAC|User |Time Stamp|
-|:---------|:----|:---------|
-|dli5s6    |Cindy|2018/01/13|
++ Except MAC and user, all initialize to 0.
+|Target MAC|User |Time Stamp|Latitude|Longitude|
+|:---------|:----|:---------|:-------|:--------|
+|dli5s6    |Cindy|2018/01/13|24.5    |120.1    |
+|...       |...  |...       |...     |...      |
+
+### Event Table
+|Latitude|Longitude|Region|Time Stamp|
+|:-------|:--------|:-----|:---------|
+|24.5    |121      |Delta |2018/01/13|
+|...     |...      |...   |...       |
+
+### Place Table
++ All place initialize to 0.
+|Region |Number of Events|
+|:------|:---------------|
+|Delta  |20              |
+|library|50              |
+|...    |...             |
+
+### Time Table
++ Hour: 0~23
+|Hour|Number of Events|
+|:---|:---------------|
+|0   |6               |
+|1   |12              |
+|... |...             |
 
 
 ## Server
+
+### Function Description
++ Organize the data that sensors collect.
++ Provide API for phone APP and Website.
+
+### Organize Data
++ Decide GPS latitude and longitude belong to which region in NTHU.
++ When new event occurs, update the statistical data.
+	>+ place table: convert GPS data to region, and add 1 case at corresponding region.
+	>+ time table: add 1 time at corresponding hour
+
+### What APP Needs?
++ login page
+	>1.look up account
+		'''
+		input: user name
+		output: No user **or** user password
+		'''
+	>2.create new account: add new element to Account Table
+		'''
+		input: user name **and** password
+		output: nothing
+		'''
++ monitor/trace page
+	>1.trace target
+		'''
+		input: target MAC
+		output: timestamp **and** GPS data(latitude&longitude)
+		(if not found MAC, return all zero)
+		'''
+	>2.add event: add new element to Event Table
+		'''
+		input: timestamp **and** GPS data(latitude&longitude)
+		output: nothing
+		'''
++ setting page
+	>1.modify password: update Account Table
+		'''
+		input: user name **and** new password
+		output: nothing
+		'''
+	>2.add target: add new element to Target List Table
+		'''
+		input: user name **and** target MAC
+		output: nothing
+		'''
+	>3.remove target: delete element from Target List Table
+		'''
+		input: target MAC
+		output: nothing
+		'''
 
 
 ## Website
