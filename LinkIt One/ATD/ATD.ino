@@ -49,10 +49,19 @@ typedef struct gps_info{
 };
 gps_info GPS_INFO;
 
-#include "LDHT.h"
-char readcharbuffer[20];
+#include "LDHT.h" 
+//lora trans
+double latitude_change;
+int latitude_trans;
+double longtitude_change;
+int longtitude_trans;
+double altitude_change;
+int altitude_trans;
+char test[50];
+char readcharbuffer[40];
 int readbuffersize;
 char temp_input;  
+//lora trans
 
 void setup() {
   // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -100,11 +109,7 @@ void loop()
     parseGPGGA((const char*)info.GPGGA);
 
     //TODO:upload GPS_INFO.latitude_output and GPS_INFO.longtitude_output to MCS
-    transmit(1, GPS_INFO.latitude_output);
-    check();
-    transmit(2, GPS_INFO.longtitude_output);
-    check();
-    transmit(3, GPS_INFO.altitude_value);
+    transmit(GPS_INFO.latitude_output, GPS_INFO.longtitude_output, GPS_INFO.altitude_value);
     check();
   }else{
     digitalWrite(13, LOW);
@@ -121,21 +126,27 @@ void printAcceleration(){
   Serial.print(",");
   Serial.println(Axyz[2]);
 }
-
-void transmit(int index, double data){
-  //Serial1.print("AT+DTX=11,\"data\"");
-  char buff[256];
-  sprintf(buff, "%d,%.*lf", index, ((data>=100)?5:6) , data);
-  Serial1.print("AT+DTX=");
-  Serial1.print(strlen(buff));
-  Serial1.print(",\"");
-  Serial1.print(buff);
-  Serial1.println("\"");
-  Serial.print("AT+DTX=");
-  Serial.print(strlen(buff));
-  Serial.print(",\"");
-  Serial.print(buff);
-  Serial.println("\"");
+//please test outside!!
+void transmit(double latitude_output,double longtitude_output, double altitude_value){
+  latitude_change = latitude_output*100000;
+  latitude_trans = (int)latitude_change;
+  longtitude_change = longtitude_output*100000;
+  longtitude_trans = (int)longtitude_change;
+  if(GPS_INFO.altitude_value>100){
+    altitude_change = altitude_value*10000;
+    altitude_trans = (int)altitude_change;
+  }
+  else
+  {
+    altitude_change = altitude_value*100000;
+    altitude_trans = (int)altitude_change; 
+  }
+  sprintf(test, "AT+DTX=22,%d%d%d",latitude_trans,longtitude_trans,altitude_trans);
+  Serial.println("Ready to Send");
+  Serial.println(test);
+  delay(2000);
+  Serial1.println(test);
+  delay(1000);
 }
 
 void check(){
